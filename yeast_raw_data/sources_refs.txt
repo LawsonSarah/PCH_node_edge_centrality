@@ -1,0 +1,2 @@
+raw_complex_yeast.txt from https://github.com/qindynasty/LBCC/blob/master/LBCC_python/complex.txt
+essential and non-essential_proteins_yeast.txt from s1 supplemntary data to paper
