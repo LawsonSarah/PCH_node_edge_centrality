@@ -9,29 +9,7 @@ Please quote these two papers if using code and refer to licenses.txt for additi
 
 To replicate results from this paper:
 
-1) Download and save julia files in your file_path:
-
-"$file_path\\Main.ipynb" 
-
-"$file_path\\data_processing_functions.jl" 
-
-"$file_path\\mappings_initialization.jl" 
-
-"$file_path\\compute_centrality_functions.jl"
-
-"$file_path\\analysis_functions.jl"
-
-"$file_path\\helper_functions.jl" 
-
-"$file_path\\plot_functions.jl"
-
-"$file_path\\high_performance.jl"
-
-"$file_path\\setA_1_1_c_kc_centralities"
-
-"$file_path\\setB_comb_0_1_195_95_centralities"
-
-2) Download raw data folder as "$file_path\\yeast_raw_data".
+1) Download and save julia files
 
 3) Create "$file_path\\Outputs folder with "$file_path\\Outputs\\plot_exports" subfolder.
 

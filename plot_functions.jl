@@ -16,10 +16,10 @@ function prec_plot(cent_dict_input, ness, ess,ess_dict,cent_type; inc_rand=true,
    
     figure()
     plt.figure(figsize=(15,15))
-    xlabel("Recall",fontsize=20, fontname="arial")
-    ylabel("Precision",fontsize=20, fontname="arial")
-    plt.xticks(fontsize=14, fontname="arial")
-    plt.yticks(fontsize=14, fontname="arial")
+    xlabel("Recall",fontsize=30, fontname="arial")
+    ylabel("Precision",fontsize=30, fontname="arial")
+    plt.xticks(fontsize=25, fontname="arial")
+    plt.yticks(fontsize=25, fontname="arial")
     
     if cent_type=="x"
         tt="nodes"
@@ -67,7 +67,7 @@ function prec_plot(cent_dict_input, ness, ess,ess_dict,cent_type; inc_rand=true,
         end     
         PyPlot.plot(rec_plotr, prec_plotr, "--")
     end
-    plt.legend(legend, fontsize=14)
+    plt.legend(legend, fontsize=20)
     PyPlot.savefig("$output_path\\plot_exports\\prec_rec_$cent_type.jpg", dpi=300, bbox_inches="tight")    
 end
 
@@ -89,10 +89,10 @@ function cumulative_essential(centralities, x_range, essent, class_dict, cent_di
 
     figure()
     plt.figure(figsize=(15,15))
-    xlabel("Number of $tt (t)",fontsize=20, fontname="arial")
-    ylabel("Number of essential $tp",fontsize=20,fontname="arial")
-    plt.xticks(fontsize=14)
-    plt.yticks(fontsize=14)
+    xlabel("Number of $tt (t)",fontsize=30, fontname="arial")
+    ylabel("Number of essential $tp",fontsize=30,fontname="arial")
+    plt.xticks(fontsize=25)
+    plt.yticks(fontsize=25)
     legend=Vector{String}()
 
     # x values
@@ -127,7 +127,7 @@ function cumulative_essential(centralities, x_range, essent, class_dict, cent_di
 
     PyPlot.plot(x_plot, y_plot, "--")
     
-    plt.legend(legend, fontsize=14)  
+    plt.legend(legend, fontsize=20)  
     ranks_by_name_exc=[]
     ranks_by_binary=[]
     cent_name=[] 
