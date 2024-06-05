@@ -1,15 +1,17 @@
-Code contained in this repo  accompanies the paper "An application of node and edge nonlinear hypergrpah centrality to a protein complex hypernetwork." Lawson, S., Donovan, D., Lefevre,J. School of Mathematics and Physics, University of Queensland 2024 (unpublished). Please quote this paper if using code and include additional references as below where required.
+CODE:
+----------------------------------------
+Code contained in this repo accompanies the paper "An application of node and edge nonlinear hypergraph centrality to a protein complex hypernetwork." Lawson, S., Donovan, D., Lefevre,J. School of Mathematics and Physics, University of Queensland 2024 (unpublished). Please quote this paper if using code and include additional references as below where required.
 
-The code presented in this repo including but not limited to the make_mappings, read_data and computer_centrality functions, incorporates code from the paper "Node and Edge Eigenvector Centrality for Hypergraphs"
+The code presented in this repo including but not limited to the make_mappings, read_data and computer_centrality functions, incorporates source code from the paper "Node and Edge Eigenvector Centrality for Hypergraphs"
 https://arxiv.org/abs/2101.06215 by
 Tudisco F, Higham DJ. Node and Edge Nonlinear Eigenvector Centrality for Hypergraphs. Communications Physics.
 2021 Jan;4:244.
 
 
-Data:
+DATA:
 ----------------------------------------
-The raw_complex_yeast.txt complex data was obtained from [1]. The data contained in this dataset, combines four existing protein complex sets (CM270 [2], CM425 [2] [3] [4], CYC408 and CTC428 both from CYC2008 [5], [6]). 
-Protein essentiality data, essential_proteins_yeast.txt and nonessential_proteins_yeast.txt was obtained from [7] and originated from MIPS [8], SGD [9], DEG [10] and SGDP [11]. 
+The raw_complex_yeast.txt data was obtained from supplementary data s2 in [1]. The data contained in this dataset, originated from four existing protein complex sets (CM270 [2], CM425 [2] [3] [4], CYC408 and CTC428 both from CYC2008 [5], [6]). 
+essential_proteins_yeast.txt and nonessential_proteins_yeast.txt was obtained from supplementary data s1 in [7] which originated from MIPS [8], SGD [9], DEG [10] and SGDP [11]. 
 
 
 [1]Luo J, Qi Y. Identification of Essential Proteins Based on a New Combination of Local Interaction Density and Protein
