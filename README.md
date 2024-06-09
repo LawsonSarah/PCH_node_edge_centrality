@@ -9,7 +9,7 @@ Please quote these two papers if using code and refer to licenses.txt for additi
 
 To replicate results from this paper:
 
-1) Download and save julia files
+1) Download julia files into your file_path. Note setA_1_1_c_kc_centralities.jld2is a large GIT LFS file which can be downloaded seperately, only the pointers are included in Github's Download zip.  
 
 3) Create "$file_path\\Outputs folder with "$file_path\\Outputs\\plot_exports" subfolder.
 
