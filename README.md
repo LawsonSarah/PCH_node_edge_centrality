@@ -7,13 +7,13 @@ Tudisco F, Higham DJ. Node and Edge Nonlinear Eigenvector Centrality for Hypergr
 
 Please quote these two papers if using code and refer to licenses.txt for additional citation and licensing information.
 
-To replicate results from this paper:
+Code was written in julia and includes a .ipynb file to be used in jupyter notebook. To replicate results from this paper:
 
 1) Download julia files into your file_path. Note setA_1_1_c_kc_centralities.jld2 is a large GIT LFS file which can be downloaded seperately, only the pointers are included in Github's Download zip.  
 
 3) Create "$file_path\\Outputs folder with "$file_path\\Outputs\\plot_exports" subfolder.
 
-4) In Main.ipynb, update file_path and output_path .
+4) In Main.ipynb, update file_path and output_path. 
 
 5)* In Main.ipynb choose function set by setting varying=
    setA: centralities and figures for the Set A functions    
