@@ -1,11 +1,8 @@
-Code contained in this repo  accompanies the paper "An application of node and edge nonlinear hypergraph centrality to a protein complex hypernetwork." Lawson, S., Donovan, D., Lefevre, J. School of Mathematics and Physics, University of Queensland 2024 (unpublished). 
+Code contained in this repo accompanies the paper "An application of node and edge nonlinear hypergraph centrality to a protein complex hypernetwork." Lawson, S., Donovan, D., Lefevre, J. School of Mathematics and Physics, University of Queensland 2024. Please quote this paper if using the code.
 
-The code presented in this repo incorporates code from the paper "Node and Edge Eigenvector Centrality for Hypergraphs"
-https://arxiv.org/abs/2101.06215 by
-Tudisco F, Higham DJ. Node and Edge Nonlinear Eigenvector Centrality for Hypergraphs. Communications Physics.
-2021 Jan;4:244 including but not limited to the make_mappings, read_data and computer_centrality functions.
+This code incorporates code from the paper "Node and edge nonlinear eigenvector centrality for hypergraphs" Tudisco F, Higham DJ. Node and edge nonlinear eigenvector centrality for hypergraphs. Communications Physics. 2021 Jan;4:244. https://github.com/ftudisco/node-edge-hypergraph-centrality including but not limited to the make_mappings, read_data and compute_centrality functions. Please refer to this paper if using code and quote appropriately.
 
-Please quote these two papers if using code and refer to licenses.txt for additional citation and licensing information.
+Please refer to licenses.txt for additional citation and licensing information including original data sources.
 
 Code was written in julia and includes a .ipynb file to be used in jupyter notebook. To replicate results from this paper:
 
