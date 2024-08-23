@@ -264,3 +264,20 @@ function edge_class_dict(node_ess_dict, edges_fromB, node_names_list;printlines=
         end     
         return class_dict, essent, non_essent
     end
+
+function read_LBBC_cent(cent_file)
+#     #INPUT file containing output fomr running LBBC code
+#     #OUTPUT dictionary key:protein name value: LBBC centrality
+
+    lbbc_dict=Dict()
+    f = open((cent_file))
+
+    for line in eachline(cent_file)
+        # create a set of participating yeast proteins to add to complex
+        entries = split(line,"\t")
+        if entries[1]!="name"
+         lbbc_dict[entries[1]]=parse(Float64,entries[6])
+        end
+    end 
+    return lbbc_dict
+end

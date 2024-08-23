@@ -9,14 +9,13 @@ Please quote these two papers if using code and refer to licenses.txt for additi
 
 To replicate results from this paper:
 
-1) Download julia files into your file_path. Note setA_1_1_c_kc_centralities.jld2is a large GIT LFS file which can be downloaded seperately, only the pointers are included in Github's Download zip.  
+1) Download julia files into your file_path. Note setA_1_1_c_kc_centralities.jld2 is a large GIT LFS file which can be downloaded seperately, only the pointers are included in Github's Download zip.  
 
 3) Create "$file_path\\Outputs folder with "$file_path\\Outputs\\plot_exports" subfolder.
 
 4) In Main.ipynb, update file_path and output_path .
 
-5) In Main.ipynb choose function set by setting varying=
-
+5)* In Main.ipynb choose function set by setting varying=
    setA: centralities and figures for the Set A functions    
 setB_summary: centralities and figures for Set B summary functions    
     A_B_summary: centralities and figures for the overall classification      
@@ -29,21 +28,21 @@ setB_summary: centralities and figures for Set B summary functions
 
 Note: Delete outputs before rerunning.
 
-VARIATION IF UPLOADING SAVED DICTIONARIES:
 
-5) Choose any of setA, setB or A_B_summary.
+
+*5) VARIATION IF UPLOADING LARGE SAVED DICTIONARIES:
+- Choose any of varying=setA, setB or A_B_summary.
    
-6) Comment out "centralities, ranked_nodes_dict, ranked_edges_dict, mappings =
-    initialization(varying); #centralitites based on 'varying' parameter".
+- Comment out "centralities, ranked_nodes_dict, ranked_edges_dict, mappings =
+    initialization(varying); #centralities based on 'varying' parameter".
     
-7) Uncomment relevant presaved dictionary:
+- Uncomment relevant presaved dictionary:
    
     centralities=load_object("setA_1_1_c_kc_centralities.jld2")
    
    centralities=load_object("setB_comb_0_1_195_95_centralities.jld2").
    
-9) Comment out AUC and plot creation code.
+- Comment out AUC and plot creation code.
 
-10) Run code from Main.ipynb. Plots will be saved in the plot_exports folder.
 
 

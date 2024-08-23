@@ -12,7 +12,7 @@ DATA:
 ----------------------------------------
 The raw_complex_yeast.txt data was obtained from supplementary data s2 in [1]. The data contained in this dataset, originated from four existing protein complex sets (CM270 [2], CM425 [2] [3] [4], CYC408 and CTC428 both from CYC2008 [5], [6]). 
 essential_proteins_yeast.txt and nonessential_proteins_yeast.txt was obtained from supplementary data s1 in [7] which originated from MIPS [8], SGD [9], DEG [10] and SGDP [11]. 
-
+LBBC_centralities.txt resulted from using code provided in [7] applied to the MIPS PIN. This code can be found at https://github.com/qindynasty/LBCC.
 
 [1]Luo J, Qi Y. Identification of Essential Proteins Based on a New Combination of Local Interaction Density and Protein
 Complexes. PloS one. 2015 Jun;10(6):e0131418

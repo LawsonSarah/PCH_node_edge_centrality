@@ -1,16 +1,19 @@
-function rank_arrays(centrality_list, cent_type, class_dict; reverse=true)
-    #Helper function for class measures and area_UC
-    #Input: centrality dictionary and mappings
+function rank_arrays(centrality_list, cent_type, class_dict; reverse=true, pin_pch_int=false, int_node_numbers=[])
     #Output: vector of top centralities  by node /edge number, by node name /edge number, by centralities,by class represented as binary by class represented by name
     
     rank_by_name = Array{String}(undef,0) #for rank by node name or edge number
-    x = centrality_list#for each mapping get list of centralities
+    x = centrality_list#for each mapping get list of centralities 
     xid = sortperm(vec(x),rev=reverse); # Output as a list of node/edge numbers by largest to smallest centralities 
     xx = x[xid]; #lists centrality values in order of largest to smallest (or smallest to largest if average rank)
-
+    
+    if pin_pch_int
+            index = sortperm(vec(x),rev=reverse); # Output as a list of node/edge numbers by largest to smallest centralities 
+        xid=[int_node_numbers[i] for i in index] #xid is node numbers to idenitfy names. For the intersection PIN_PCH this doesn't correspond to the index of the centrality in the vector as it does in the centralities based on an inputted PCH.
+        
+    end   
     rank_by_centralities=xx
     rank_by_number=xid
-
+           
     if cent_type=="x"   
         for x in xid
             name=node_names_list[x]
@@ -18,8 +21,7 @@ function rank_arrays(centrality_list, cent_type, class_dict; reverse=true)
         end
     else rank_by_name=xid #no edge names
         
-    end  
-    
+    end 
     rank_by_class = [class_dict[x] for x in rank_by_name]
 
     rank_by_name_exc=[]#exclude unknowns in ranking
@@ -49,7 +51,7 @@ end
 function pred_binary_ess_rank(class_dict, x)
     #Input: classification of nodes or edges in class_dict, x -threshold
     #Output: binary array with top x entries = 1 (essential) and remaining entries=0 (nonessential) 
-
+    #must be exact nodes being analysed in class_dict
     exc_unk=count(i->(i!= "unknown"), values(class_dict) ) #number of classified keys in class_dict
     predict_by_binary = ones(Float64,exc_unk) #float to use prec rec curve functions
      #predict_by_binary = ones(Int64,exc_unk)
@@ -99,12 +101,15 @@ function conf_matrix_measures(rank_by_binary, predict_by_binary; printlines=true
     return tp,tn,fp,fn,ppv,acc,f1,tpr,tnr,npv
 end
 
-function class_measures(cent_dict, cent, class_dict, cent_type, top, ess; printlines=false, reverse=true)
+function class_measures(cent_dict, cent, class_dict, cent_type, top, ess; printlines=false, reverse=true, pin_pch_int=false, 
+        int_node_numbers=[])
+
     #create classification measures for function set inputted, cent_type (node or edge) and top threshold. Helper function for all_class_measures
     centrality_list=cent_dict[cent][cent_type]
     rank_by_number, rank_by_name, rank_by_name_exc, rank_by_centralities,rank_by_binary,rank_by_class=
-    rank_arrays(centrality_list, cent_type, class_dict, reverse=reverse)
+    rank_arrays(centrality_list, cent_type, class_dict, reverse=reverse, pin_pch_int=pin_pch_int, int_node_numbers=int_node_numbers)
     predict_by_binary=pred_binary_ess_rank(class_dict, top) #array of top ess 1's
+
     
     if printlines
         println(cent)
@@ -119,7 +124,8 @@ end
 
 
 
-function all_class_measures(top, ess,  non_essent,cent_dict_input, class_dict, cent_type; print=false)
+function all_class_measures(top, ess,  non_essent,cent_dict_input, class_dict, cent_type; print=false, pin_pch_int=false, 
+        int_node_numbers=[])
     #Input: Cent_dict - array of centrality names
      #Outputs classification measures dictionary and array of values of true positives and centrality names for plotting. Helper function for all_class_measures_plots. 
     measures_dict=Dict()   
@@ -129,7 +135,7 @@ function all_class_measures(top, ess,  non_essent,cent_dict_input, class_dict, c
     
     for cents_dict in cent_dict_input
         
-         if @isdefined rank_av_cent_dict 
+        if @isdefined rank_av_cent_dict 
             if cents_dict==rank_av_cent_dict
                 rev = false #want average degree to be ranked from smallest to larger when ranking arrays
             else 
@@ -141,14 +147,15 @@ function all_class_measures(top, ess,  non_essent,cent_dict_input, class_dict, c
         
         for i in vcat(collect(keys(cents_dict)))
             predict_by_binary, tp,tn,fp,fn,ppv,acc,f1,tpr,tnr,npv=
-            class_measures(cents_dict, i, class_dict, cent_type, top_int, ess, printlines=print, reverse=rev);
+            class_measures(cents_dict, i, class_dict, cent_type, top_int, ess, printlines=print, reverse=rev, pin_pch_int=pin_pch_int, 
+        int_node_numbers=int_node_numbers);
             measures_dict["$i $top_int"]=[tp,tn,fp,fn,ppv,acc,f1,tpr,tnr,npv]
             push!(x_ess_plot,i)
             push!(y_ess_plot,tp)
         end
     end
 
-    push!(x_ess_plot,"random")
+    push!(x_ess_plot,"Random")
     push!(y_ess_plot, Int(floor(top_int*(ess/(ess+non_essent))))) 
 
     
@@ -156,10 +163,11 @@ function all_class_measures(top, ess,  non_essent,cent_dict_input, class_dict, c
 end
 
 
-function all_class_measures_plots(cent_type, centralities, deg_centralities, edge_deg_centralities, n_essent, n_non_essent, node_ess_dict, e_essent, e_non_essent, edge_ess_dict, range_top; comb_centralities=[], rank_av_cent_dict=[], printlines=false, varying="none") 
+function all_class_measures_plots(cent_type, centralities, deg_centralities, edge_deg_centralities, n_essent, n_non_essent, node_ess_dict, e_essent, e_non_essent, edge_ess_dict, range_top; comb_centralities=[], rank_av_cent_dict=[], printlines=false, varying="none",  pin_pch_int=false, int_node_numbers=[], percentage=false) 
     #prints measures, box plots, precision-recall curve and cumulative plots
     
     println("cent_type  ", cent_type)
+
 
     if cent_type=="x"
         if printlines
@@ -172,6 +180,7 @@ function all_class_measures_plots(cent_type, centralities, deg_centralities, edg
         essent=n_essent
         non_essent=n_non_essent
         class_dict=node_ess_dict
+        tne= L"e_p"
                
     else #edges
         if printlines
@@ -184,59 +193,101 @@ function all_class_measures_plots(cent_type, centralities, deg_centralities, edg
         non_essent=e_non_essent        
         cent_dict_input=[centralities]     
         class_dict=edge_ess_dict
+        tne= L"e_c"
         
     end
 
     measures_dict, x_names_plot, y_essent_plot=all_class_measures(
-    essent, essent,  non_essent,cent_dict_input, class_dict, cent_type; print=printlines)
+    essent, essent,  non_essent,cent_dict_input, class_dict, cent_type; print=printlines, pin_pch_int=pin_pch_int, 
+        int_node_numbers=int_node_numbers)
 
-    k=prec_plot(cent_dict_input,non_essent,essent, class_dict, cent_type) 
-    perc=range_top
-    rt=floor.(perc.*essent)
+    k=prec_plot(cent_dict_input,non_essent,essent, class_dict, cent_type,  pin_pch_int= pin_pch_int, int_node_numbers=int_node_numbers) 
+    
+    
+    
+    perc=range_top #threshold percentages
+    rt=floor.(perc.*essent) #threshold numbers
 
     
-    function addlabels(x,y)
+    function addlabels(x,y; shift=false)
         for i in range(1,length(x))
-            plt.text(i,y[i]+0.2,y[i],fontsize=14, ha = "center")
+            if shift
+                 plt.text(i-1,y[i]+0.2,y[i],fontsize=12, ha = "center")
+            else
+                plt.text(i,y[i]+0.2,y[i],fontsize=12, ha = "center")
+            end
+            
         end
     end
     
-    
-    plt.figure(figsize=(18,18))
+    plt.figure(figsize=(15,15))
     plt.subplots_adjust(bottom=0.4,                    
                     top=0.9, 
                     #wspace=0.4, 
                     hspace=0.8)
+     sp=1
+    if percentage 
+        for i in rt
+            i=Int(ceil(i))
+            subplot(2,3,sp)
+            if printlines
+                println("_________________________")
+                println("FOR $i TOP $tt")
+            end
 
-    sp=1
-    for i in rt          
-        i=Int(ceil(i))
-        subplot(2,3,sp)
-        if printlines
-            println("_________________________")
-            println("FOR $i TOP $tt")
-        end
-        
-        measures_dict,x_names_plot, y_essent_plot=all_class_measures(
-            i, essent, non_essent, cent_dict_input, class_dict, cent_type; print=printlines)
-        b = PyPlot.bar(x_names_plot,y_essent_plot,color="#0f87bf",align="center",alpha=0.4)
-        pc=Int(perc[sp]*100)
-        addlabels(x_names_plot,y_essent_plot)
+            measures_dict,x_names_plot, y_essent_plot=all_class_measures(
+                i, essent, non_essent, cent_dict_input, class_dict, cent_type; print=printlines,pin_pch_int=pin_pch_int, 
+            int_node_numbers=int_node_numbers)
+            
+            y_essent_perc_plot=[round((t/n_essent)*100,digits=2) for t in y_essent_plot] #percentage of essential proteins predicted
+            b = PyPlot.bar(x_names_plot,y_essent_perc_plot,color="#0f87bf",align="center",alpha=0.4)
+            pc=Int(perc[sp]*100)
+            addlabels(x_names_plot,y_essent_perc_plot,shift=true)
+            title("Threshold: $pc% of $tne", fontsize=12, fontname="arial", )       
+            if sp in[1,4]
+                ylabel("Total % of essential $tt",fontsize=12)
+            end
 
-        title("Top $i $tt ($pc%)", fontsize=20,fontname="arial", )
-        if sp in[1,4]
-            ylabel("Number of essential $tt",fontsize=16)
+            plt.xticks(fontsize=12, fontname="arial", rotation=80)
+            plt.yticks(fontsize=12,fontname="arial", )
+            sp+=1
+            plt.margins(y=0.2)
+        end       
+    else 
+        for i in rt
+            i=Int(ceil(i))
+            subplot(2,3,sp)
+            if printlines
+                println("_________________________")
+                println("FOR $i TOP $tt")
+            end
+
+            measures_dict,x_names_plot, y_essent_plot=all_class_measures(
+                i, essent, non_essent, cent_dict_input, class_dict, cent_type; print=printlines,pin_pch_int=pin_pch_int, 
+            int_node_numbers=int_node_numbers)
+            b = PyPlot.bar(x_names_plot,y_essent_plot,color="#0f87bf",align="center",alpha=0.4)
+            pc=Int(perc[sp]*100)
+            addlabels(x_names_plot,y_essent_plot)
+            title("Top $i $tt ($pc% of $tne)", fontsize=16,fontname="arial", )       
+            if sp in[1,4]
+                ylabel("Number of essential $tt",fontsize=12)
+            end
+            plt.xticks(fontsize=12, fontname="arial", rotation=80)
+            plt.yticks(fontsize=12,fontname="arial", )
+            sp+=1
+            plt.margins(y=0.2)
         end
-        plt.xticks(fontsize=14, fontname="arial", rotation=80)
-        plt.yticks(fontsize=14,fontname="arial", )
-        sp+=1
-        plt.margins(y=0.2)
     end
+
+    if pin_pch_int
+                PyPlot.savefig("$output_path\\plot_exports\\int_boxplot_tops_$cent_type.jpg", dpi=300, bbox_inches="tight")      
+    else
     PyPlot.savefig("$output_path\\plot_exports\\boxplot_tops_$cent_type.jpg", dpi=300, bbox_inches="tight")
-        
+    end   
+    
     #draw cumulative graph
-    x_range=range(1,essent+non_essent)
-    cumulative_essential(centralities,x_range,essent,class_dict,cent_dict_input,cent_type)
+    x_range=range(1, essent+non_essent) 
+    cumulative_essential(centralities,x_range,essent,class_dict,cent_dict_input,cent_type,pin_pch_int= pin_pch_int, int_node_numbers=int_node_numbers)
     
     return measures_dict
 end
